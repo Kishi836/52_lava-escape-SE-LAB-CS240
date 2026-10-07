@@ -7,6 +7,7 @@ class Player:
         self.rect = pygame.Rect(x, y, 32, 32)
         self.vel_y = 0
         self.on_ground = False
+        self.standing_on = None
         self.color = (60,160,220)
 
     def update(self, keys, platforms, width):
@@ -22,12 +23,14 @@ class Player:
         prev_bottom = self.rect.bottom
         self.rect.y += int(self.vel_y)
         self.on_ground = False
+        self.standing_on = None
         for p in platforms:
             # land only when falling and the feet were above the top edge last frame
             if self.vel_y > 0 and self.rect.colliderect(p) and prev_bottom <= p.top:
                 self.rect.bottom = p.top
                 self.vel_y = 0
                 self.on_ground = True
+                self.standing_on = p
 
     def draw(self, screen, cam_y):
         dr = self.rect.move(0, -int(cam_y))
