@@ -3,15 +3,18 @@ import random
 
 PLATFORM_COLOR = (100,80,50)
 LAVA_COLOR = (220,60,20)
+MAX_EDGE_GAP = 80
 
 def generate_platforms(width, base_y, count=30):
     plats = [pygame.Rect(0, base_y, width, 20)]  # ground
     y = base_y - 110
     for i in range(count):
         w = random.randint(80,200)
-        x = random.randint(0, width-w)
+        # keep the next platform within jump reach (max jump ~135px up, ~128px across at 115px up)
+        prev = plats[-1]
+        x = random.randint(max(0, prev.left-w-MAX_EDGE_GAP), min(width-w, prev.right+MAX_EDGE_GAP))
         plats.append(pygame.Rect(x, y, w, 16))
-        y -= random.randint(80,130)
+        y -= random.randint(80,115)
     return plats
 
 def draw_lava(screen, lava_y, cam_y, width, height, frame):
