@@ -35,6 +35,8 @@ class GameEngine:
         self.won=False
         self.top_y=self.platforms[-1].y
         self.frame=0
+        self.start_ticks=pygame.time.get_ticks()
+        self.elapsed_ms=0
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -55,6 +57,7 @@ class GameEngine:
         self.lava_rise=min(1.2,self.lava_rise+0.0003)
         self.score=max(0,(GROUND_Y-self.player.rect.y)//10)
         self.frame+=1
+        self.elapsed_ms=pygame.time.get_ticks()-self.start_ticks  # frozen once the run ends
         if self.player.rect.bottom>=self.lava_y:
             self.game_over=True
         if self.player.rect.top<=self.top_y-20:
@@ -68,6 +71,9 @@ class GameEngine:
         draw_lava(self.screen,self.lava_y,self.cam_y,WIDTH,HEIGHT,self.frame)
         sc=self.font.render(f"Height: {self.score}m  R=Restart",True,(220,200,180))
         self.screen.blit(sc,(8,10))
+        ms=self.elapsed_ms
+        tm=self.font.render(f"{ms//60000:02}:{ms//1000%60:02}:{ms%1000:03}",True,(220,200,180))
+        self.screen.blit(tm,(WIDTH-tm.get_width()-8,10))
         self._danger_meter()
         if not self.game_over and self.lava_y-self.player.rect.bottom<=WARN_DIST:
             self._warning()
