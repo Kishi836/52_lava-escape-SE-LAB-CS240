@@ -25,8 +25,8 @@ class GameEngine:
     def reset(self):
         self.platforms=generate_platforms(WIDTH,GROUND_Y)
         self.player=Player(WIDTH//2-16,GROUND_Y-50)
-        self.cam_y=0
-        self.lava_y=GROUND_Y+60
+        self.cam_y=GROUND_Y+20-HEIGHT  # ground sits at the bottom of the screen
+        self.lava_y=GROUND_Y+WARN_DIST+20  # start just outside the warning range
         self.lava_rise=0.4
         self.lava_speed=self.lava_rise
         self.surging=False
