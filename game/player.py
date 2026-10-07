@@ -1,6 +1,7 @@
 import pygame
 
 SPEED = 4
+SPRING_VEL = -22  # ~409px apex vs ~135px for a normal jump (3x)
 
 class Player:
     def __init__(self, x, y):
@@ -31,6 +32,9 @@ class Player:
                 self.vel_y = 0
                 self.on_ground = True
                 self.standing_on = p
+                if p.kind == "spring":
+                    self.vel_y = SPRING_VEL
+                    self.on_ground = False
 
     def draw(self, screen, cam_y):
         dr = self.rect.move(0, -int(cam_y))
